@@ -1,0 +1,17 @@
+task runAppDocker_springboot(type: Exec) {
+    dependsOn "createAppDockerImages_springboot"
+    commandLine 'docker-compose', '--file', 'docker-compose-springboot-psql-reactjs.yml', 'up'
+}
+
+task runAppDocker_dropwizard(type: Exec) {
+    dependsOn "createAppDockerImages_dropwizard"
+    commandLine 'docker-compose', '--file', 'docker-compose-dropwizard-psql-reactjs.yml', 'up'
+}
+
+task stopAppDocker_springboot(type: Exec) {
+    commandLine 'docker-compose', '--file', 'docker-compose-springboot-psql-reactjs.yml', 'down'
+}
+
+task stopAppDocker_dropwizard(type: Exec) {
+    commandLine 'docker-compose', '--file', 'docker-compose-dropwizard-psql-reactjs.yml', 'down'
+}
