@@ -20,15 +20,6 @@ task createClientDockerImageReactJS(type: Exec) {
     commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-client-reactjs", "--network" ,"host", "-f", "docker/client/reactjs/Dockerfile"
 }
 
-task createServerBuildSpringBoot(type: Exec) {
-    dependsOn ":servers:spring_boot:copyDependencies", ":servers:spring_boot:build"
-    commandLine 'echo', 'SpringBoot Server Build Successful'
-}
-
-task createServerDockerImageSpringBoot(type: Exec) {
-    commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-server-spring-boot",  "--network" ,"host", "-f", "docker/server/spring_boot/Dockerfile"
-}
-
 task createServerBuildDropwizard(type: Exec) {
     dependsOn ":servers:dropwizard:copyDependencies", ":servers:dropwizard:build"
     commandLine 'echo', 'Dropwizard Server Build Successful'
@@ -42,10 +33,7 @@ task createDBDockerImagePostgreSQL(type: Exec) {
     commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-db-postgresql", "-f", "docker/db/postgresql/Dockerfile"
 }
 
-task createAppDockerImages_springboot(type: Exec) {
-    dependsOn "createDBDockerImagePostgreSQL", "createServerDockerImageSpringBoot", "createClientDockerImageReactJS"
-    commandLine 'echo', 'success create images'
-}
+
 task createAppDockerImages_dropwizard(type: Exec) {
     dependsOn "createDBDockerImagePostgreSQL", "createServerDockerImageDropwizard", "createClientDockerImageReactJS"
     commandLine 'echo', 'success create images'
@@ -53,16 +41,11 @@ task createAppDockerImages_dropwizard(type: Exec) {
 
 
 task buildAllTasks(type: Exec) {
-    dependsOn createServerBuildSpringBoot, createServerBuildDropwizard, ":clients:reactjs:buildReactApp"
+    dependsOn createServerBuildDropwizard, ":clients:reactjs:buildReactApp"
     commandLine 'echo', 'Building all frameworks'
 
 }
 
-
-task runSpringBootServer(type: Exec){
-    dependsOn(createServerBuildSpringBoot)
-    commandLine('./gradlew', ':servers:spring_boot:bootRun')
-}
 
 task runReactJSClient(type: Exec){
     dependsOn(":clients:reactjs:runClient")
