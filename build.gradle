@@ -16,7 +16,7 @@ subprojects {
 
 // Create the docker images here, uses prebuild as multi-part images
 task createClientDockerImageReactJS(type: Exec) {
-    dependsOn ":clients:reactjs:buildReactApp"
+//    dependsOn ":clients:reactjs:buildReactApp"
     commandLine 'docker', 'build', '--rm', '.', '-t', "${dockerRepo}/${rootProject.name}-client-reactjs", "--network" ,"host", "-f", "docker/client/reactjs/Dockerfile"
 }
 
