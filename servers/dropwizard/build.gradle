@@ -23,14 +23,14 @@ dependencies {
 
 }
 
-mainClassName = "com.slabstech.revive.server.dropwizard.MainApplication"
+mainClassName = "com.slabstech.revive.server.dropwizard.HelloWorldApplication"
 configurations.implementation.canBeResolved = true
 
 jar {
     manifest {
         attributes(
                 'Class-Path': configurations.implementation.join(' '),
-                'Main-Class': 'com.slabstech.revive.server.dropwizard.MainApplication'
+                'Main-Class': 'com.slabstech.revive.server.dropwizard.HelloWorldApplication'
         )
     }
 }
@@ -40,5 +40,9 @@ task copyDependencies(type: Copy) {
     into "$buildDir/lib"
 }
 run {
-    args 'server', configPath + 'app_config.yml'
+    args 'server', 'example.yml'
+}
+
+task runDropwizard(type: Exec){
+    commandLine( 'server', configPath + 'app_config.yml')
 }
