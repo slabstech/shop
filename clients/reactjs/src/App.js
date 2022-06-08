@@ -1,32 +1,23 @@
-import React, { Component } from 'react';
 import './App.css';
-import Home from './Home';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import SetupList from './SetupList';
-import SetupEdit from "./SetupEdit";
-import ConfigurationList from './ConfigurationList';
-import ConfigurationEdit from "./ConfigurationEdit";
 
-/*
-import DeviceList from './DeviceList';
-import DeviceEdit from "./DeviceEdit";
-*/
+function App() {
+  return (
+    <div className="App">
 
-class App extends Component {
-  render() {
-    return (
-        <Router>
-          <Switch>
-            <Route path='/' exact={true} component={Home}/>
-            <Route path='/api/setup' exact={true} component={SetupList}/>
-            <Route path='/api/setup/:id' component={SetupEdit}/>
-            <Route path='/api/configurations' exact={true} component={ConfigurationList}/>
-            <Route path='/api/configurations/:id' component={ConfigurationEdit}/>
-            
-          </Switch>
-        </Router>
-    )
-  }
+      <br/>
+      <br/>
+
+      Shop Web App - Under Construction
+      <br/>
+      <br/>
+
+      Built using <a href="https://github.com/sachinsshetty/revive">Revive</a>
+      <br/>
+      <br/>
+
+      Source code available at <a href="https://github.com/slabstech/shop">Shop</a>
+    </div>
+  );
 }
 
 export default App;

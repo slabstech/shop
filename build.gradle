@@ -1,5 +1,5 @@
 ext {
-    group = 'com.slabstech.revive'
+    group = 'com.slabstech.shop'
 
     version = '0.0.1'
 
@@ -16,17 +16,8 @@ subprojects {
 
 // Create the docker images here, uses prebuild as multi-part images
 task createClientDockerImageReactJS(type: Exec) {
-    dependsOn ":clients:reactjs:buildReactApp"
-    commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-client-reactjs", "--network" ,"host", "-f", "docker/client/reactjs/Dockerfile"
-}
-
-task createServerBuildSpringBoot(type: Exec) {
-    dependsOn ":servers:spring_boot:copyDependencies", ":servers:spring_boot:build"
-    commandLine 'echo', 'SpringBoot Server Build Successful'
-}
-
-task createServerDockerImageSpringBoot(type: Exec) {
-    commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-server-spring-boot",  "--network" ,"host", "-f", "docker/server/spring_boot/Dockerfile"
+//    dependsOn ":clients:reactjs:buildReactApp"
+    commandLine 'docker', 'build', '--rm', '.', '-t', "${dockerRepo}/${rootProject.name}-client-reactjs", "--network" ,"host", "-f", "docker/client/reactjs/Dockerfile"
 }
 
 task createServerBuildDropwizard(type: Exec) {
@@ -35,17 +26,14 @@ task createServerBuildDropwizard(type: Exec) {
 }
 
 task createServerDockerImageDropwizard(type: Exec) {
-    commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-server-dropwizard",  "--network" ,"host", "-f", "docker/server/dropwizard/Dockerfile"
+    commandLine 'docker', 'build', '--rm', '.', '-t', "${dockerRepo}/${rootProject.name}-server-dropwizard",  "--network" ,"host", "-f", "docker/server/dropwizard/Dockerfile"
 }
 
 task createDBDockerImagePostgreSQL(type: Exec) {
-    commandLine 'docker', 'build', '--rm', '.', '-t', "slabstech/revive-db-postgresql", "-f", "docker/db/postgresql/Dockerfile"
+    commandLine 'docker', 'build', '--rm', '.', '-t', "${dockerRepo}/${rootProject.name}-db-postgresql", "-f", "docker/db/postgresql/Dockerfile"
 }
 
-task createAppDockerImages_springboot(type: Exec) {
-    dependsOn "createDBDockerImagePostgreSQL", "createServerDockerImageSpringBoot", "createClientDockerImageReactJS"
-    commandLine 'echo', 'success create images'
-}
+
 task createAppDockerImages_dropwizard(type: Exec) {
     dependsOn "createDBDockerImagePostgreSQL", "createServerDockerImageDropwizard", "createClientDockerImageReactJS"
     commandLine 'echo', 'success create images'
@@ -53,16 +41,11 @@ task createAppDockerImages_dropwizard(type: Exec) {
 
 
 task buildAllTasks(type: Exec) {
-    dependsOn createServerBuildSpringBoot, createServerBuildDropwizard, ":clients:reactjs:buildReactApp"
+    dependsOn createServerBuildDropwizard, ":clients:reactjs:buildReactApp"
     commandLine 'echo', 'Building all frameworks'
 
 }
 
-
-task runSpringBootServer(type: Exec){
-    dependsOn(createServerBuildSpringBoot)
-    commandLine('./gradlew', ':servers:spring_boot:bootRun')
-}
 
 task runReactJSClient(type: Exec){
     dependsOn(":clients:reactjs:runClient")

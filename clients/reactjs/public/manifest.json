@@ -1,6 +1,6 @@
 {
-  "short_name": "Revive",
-  "name": "Revive frontend",
+  "short_name": "Shop",
+  "name": "Shop RESTful App",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,5 +1,5 @@
 #### Stage 1: Build the react application
-FROM node:16.15.0-alpine3.15 as build-revive-client-reactjs
+FROM node:16.15.0-alpine3.15 as build-shop-client-reactjs
 
 # Configure the main working directory inside the docker image.
 # This is the base directory used in any further RUN, COPY, and ENTRYPOINT
@@ -32,7 +32,7 @@ RUN rm -rf ./*
 
 # Copy our custom nginx config
 COPY docker/client/reactjs/reactjs_nginx.conf ./nginx.conf
-COPY --from=build-revive-client-reactjs /app/build .
+COPY --from=build-shop-client-reactjs /app/build .
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
 EXPOSE 80
