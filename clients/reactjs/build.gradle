@@ -29,7 +29,8 @@ task buildReactApp(type: NodeTask, dependsOn: 'npmInstallReact') {
 }
 
 task runClient(type: Exec) {
-    dependsOn buildReactApp
+//    dependsOn buildReactApp
+    dependsOn npmInstallReact
     commandLine 'npm', 'start'
 }
 
