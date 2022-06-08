@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'application'
     id 'idea'
 
 }
@@ -9,6 +9,9 @@ archivesBaseName = 'app'
 group = 'com.slabstech.revive.server.dropwizard'
 version = '0.0.1'
 
+project.ext {
+    configPath = "$projectDir/config/"
+}
 
 repositories {
     mavenCentral()
@@ -19,13 +22,15 @@ dependencies {
     implementation group: 'io.dropwizard', name: 'dropwizard-core', version: "$dropwizardVersion"
 
 }
+
+mainClassName = "com.slabstech.revive.server.dropwizard.MainApplication"
 configurations.implementation.canBeResolved = true
 
 jar {
     manifest {
         attributes(
                 'Class-Path': configurations.implementation.join(' '),
-                'Main-Class': 'com.slabstech.revive.server.dropwizard.Main'
+                'Main-Class': 'com.slabstech.revive.server.dropwizard.MainApplication'
         )
     }
 }
@@ -33,4 +38,7 @@ jar {
 task copyDependencies(type: Copy) {
     from configurations.runtimeClasspath
     into "$buildDir/lib"
+}
+run {
+    args 'server', configPath + 'app_config.yml'
 }
