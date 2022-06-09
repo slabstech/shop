@@ -17,13 +17,13 @@
 
 
 ##### Execution Steps :
-| Step                                           | Command                                    | Description                             |
-|------------------------------------------------|--------------------------------------------|-----------------------------------------|
-| Build Image: Dropwizard + PostgreSQL + ReactJS | ./gradlew createAppDockerImages_dropwizard | To compile code and build docker images |
-| Run: Dropwizard + PostgreSQL + ReactJS         | ./gradlew runAppDocker_dropwizard          | To run with docker-compose              |
-| Stop: Dropwizard + PostgreSQL + ReactJS        | ./gradlew stopAppDocker_dropwizard         | To Stop Docker Run                      |
-| Run : ReactJS Client                           | ./gradlew runReactJSClient                 | Run Client ReactJS                      |
-| Run : Dropwizard Server                        | ./gradlew runDropwizardServer      | Run Server Dropwizard                   |
+| Step                                           | Command                            | Description                             |
+|------------------------------------------------|------------------------------------|-----------------------------------------|
+| Build Image: Dropwizard + PostgreSQL + ReactJS | gradle createAppDockerImages_dropwizard | To compile code and build docker images |
+| Run: Dropwizard + PostgreSQL + ReactJS         | gradle runAppDocker_dropwizard  | To run with docker-compose              |
+| Stop: Dropwizard + PostgreSQL + ReactJS        | gradle stopAppDocker_dropwizard | To Stop Docker Run                      |
+| Run : ReactJS Client                           | gradle runReactJSClient         | Run Client ReactJS                      |
+| Run : Dropwizard Server                        | gradle runDropwizard      | Run Server Dropwizard                   |
 
 * Access the application at localhost:3000
 

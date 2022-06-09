@@ -50,5 +50,14 @@ public class UserResource {
     private User findSafely(long userId) {
         return peopleDAO.findById(userId).orElseThrow(() -> new NotFoundException("No such user."));
     }
+
+    // TODO implement the functions for ShopModel
+    public void buyProduct(long productArticleNumber){}
+
+    public void subscribeEvents(String eventName){}
+
+    public void notifyCustomerProductUpdate(long productArticleNumber){}
+
+    public void notifySellerProductStock(long productArticleNumber){}
 }
 
