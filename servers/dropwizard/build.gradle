@@ -20,17 +20,25 @@ repositories {
 
 dependencies {
     implementation group: 'io.dropwizard', name: 'dropwizard-core', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-auth', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-assets', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-http2', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-hibernate', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-migrations', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-views-freemarker', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-views-mustache', version: "$dropwizardVersion"
+    implementation group: 'io.dropwizard', name: 'dropwizard-metrics-graphite', version: "$dropwizardVersion"
 
 }
 
-mainClassName = "com.slabstech.revive.server.dropwizard.HelloWorldApplication"
+mainClassName = "com.slabstech.revive.server.dropwizard.ShopApplication"
 configurations.implementation.canBeResolved = true
 
 jar {
     manifest {
         attributes(
                 'Class-Path': configurations.implementation.join(' '),
-                'Main-Class': 'com.slabstech.revive.server.dropwizard.HelloWorldApplication'
+                'Main-Class': 'com.slabstech.revive.server.dropwizard.ShopApplication'
         )
     }
 }
@@ -39,10 +47,9 @@ task copyDependencies(type: Copy) {
     from configurations.runtimeClasspath
     into "$buildDir/lib"
 }
-run {
-    args 'server', 'example.yml'
-}
+
 
 task runDropwizard(type: Exec){
-    commandLine( 'server', configPath + 'app_config.yml')
+    commandLine('build')
+    commandLine( 'java', '-jar', 'build/libs/app-0.0.1.jar', 'server', 'example.yml')
 }
