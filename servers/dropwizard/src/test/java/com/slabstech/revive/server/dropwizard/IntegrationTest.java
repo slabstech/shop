@@ -51,7 +51,7 @@ class IntegrationTest {
     }
 
     @Test
-    void testHelloWorld() {
+    void testShop() {
         final Optional<String> name = Optional.of("Dr. IntegrationTest");
         final Saying saying = APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world")
                 .queryParam("name", name.get())
