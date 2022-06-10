@@ -1,27 +1,18 @@
 package com.slabstech.revive.server.dropwizard;
 
-
-
 import com.slabstech.revive.server.dropwizard.api.Saying;
 import com.slabstech.revive.server.dropwizard.core.User;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
-import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Entity;
@@ -32,31 +23,26 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static io.dropwizard.testing.ConfigOverride.config;
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@Testcontainers(disabledWithoutDocker = true)
 @ExtendWith(DropwizardExtensionsSupport.class)
-@DisabledForJreRange(min = JRE.JAVA_16)
-public class DockerIntegrationTest {
-    @Container
-    private static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("mysql:8.0.28"));
-    private static final String CONFIG = "test-docker-example.yml";
+class IntegrationTest {
+    private static final String CONFIG = "test-example.yml";
 
     @TempDir
     static Path tempDir;
     static Supplier<String> CURRENT_LOG = () -> tempDir.resolve("application.log").toString();
     static Supplier<String> ARCHIVED_LOG = () -> tempDir.resolve("application-%d-%i.log.gz").toString();
 
-    public static final DropwizardAppExtension<ShopConfiguration> APP = new DropwizardAppExtension<>(
-            ShopApplication.class, CONFIG, new ResourceConfigurationSourceProvider(),
-            ConfigOverride.config("database.url", POSTGRESQL_CONTAINER::getJdbcUrl),
-            ConfigOverride.config("database.user", POSTGRESQL_CONTAINER::getUsername),
-            ConfigOverride.config("database.password", POSTGRESQL_CONTAINER::getPassword),
-            ConfigOverride.config("database.properties.enabledTLSProtocols", "TLSv1.1,TLSv1.2,TLSv1.3"),
-            ConfigOverride.config("logging.appenders[1].currentLogFilename", CURRENT_LOG),
-            ConfigOverride.config("logging.appenders[1].archivedLogFilenamePattern", ARCHIVED_LOG)
+    static final DropwizardAppExtension<ShopConfiguration> APP = new DropwizardAppExtension<>(
+            ShopApplication.class, CONFIG,
+            new ResourceConfigurationSourceProvider(),
+            config("database.url", () -> "jdbc:h2:" + tempDir.resolve("database.h2")),
+            config("logging.appenders[1].currentLogFilename", CURRENT_LOG),
+            config("logging.appenders[1].archivedLogFilenamePattern", ARCHIVED_LOG)
     );
 
     @BeforeAll
@@ -65,7 +51,7 @@ public class DockerIntegrationTest {
     }
 
     @Test
-    void testShop() {
+    void testHelloWorld() {
         final Optional<String> name = Optional.of("Dr. IntegrationTest");
         final Saying saying = APP.client().target("http://localhost:" + APP.getLocalPort() + "/hello-world")
                 .queryParam("name", name.get())
@@ -137,12 +123,8 @@ public class DockerIntegrationTest {
         assertThat(new File(CURRENT_LOG.get()))
                 .exists()
                 .content()
-                .contains("Starting hello-world",
-                        "Started application@",
-                        "0.0.0.0:" + APP.getLocalPort(),
-                        "Started admin@",
-                        "0.0.0.0:" + APP.getAdminPort())
-                .doesNotContain("ERROR", "FATAL", "Exception");
+                .contains("0.0.0.0:" + APP.getLocalPort(), "Starting hello-world", "Started application", "Started admin")
+                .doesNotContain("Exception", "ERROR", "FATAL");
     }
 
     @Test

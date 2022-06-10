@@ -31,7 +31,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.6'
 
 
-    testImplementation group: 'io.dropwizard', name: 'dropwizard-testing', version: "$dropwizardVersion" {
+    testImplementation( group: 'io.dropwizard', name: 'dropwizard-testing', version: "$dropwizardVersion") {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
@@ -41,12 +41,13 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:1.17.2"
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.17.2'
     testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.17.2'
+    testImplementation(group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1')
 
-    testImplementation group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-inmemory', version: '3.1.0-M3' {
+    testImplementation (group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-inmemory', version: '3.1.0-M3') {
         exclude group: 'javax.servlet', module: 'javax.servlet-api'
         exclude group: 'junit', module: 'junit'
     }
-    testImplementation group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '3.1.0-M3' {
+    testImplementation (group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '3.1.0-M3') {
         exclude group: 'javax.servlet', module: 'javax.servlet-api'
         exclude group: 'junit', module: 'junit'
     }
