@@ -52,6 +52,7 @@ task runReactJSClient(type: Exec){
     commandLine('echo', 'ReactJS Clieht Started')
 }
 
-task runDropWizardServer(type: Exec){
+task runDropwizardServer(type: Exec){
+    dependsOn(":server:dropwizard:runDropwizard")
     commandLine('echo' , 'Running Dropwizard Server')
 }
