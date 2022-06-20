@@ -9,10 +9,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.security.Principal;
 import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -20,13 +17,11 @@ import java.util.Set;
         name = "com.slabstech.revive.server.dropwizard.core.Product.findAll",
         query = "SELECT u FROM user u"
 )
-public class User implements Principal {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private final Set<String> roles;
-    private static final Random rng = new Random();
     @Column(name = "fullName", nullable = false)
     private String fullName;
 
@@ -41,10 +36,7 @@ public class User implements Principal {
     public User() {
     }
 
-    public User(String name, Set<String> roles) {
-        this.fullName = name;
-        this.roles = roles;
-    }
+
     public User(String fullName, String address, int yearBorn) {
         this.fullName = fullName;
         this.address = address;
@@ -52,13 +44,6 @@ public class User implements Principal {
     }
 
 
-    public int getRId() {
-        return rng.nextInt(100);
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
     public long getId() {
         return id;
     }

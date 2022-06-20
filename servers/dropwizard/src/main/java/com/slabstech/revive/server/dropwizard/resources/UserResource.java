@@ -19,10 +19,10 @@ import java.util.OptionalLong;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    private final UserDAO peopleDAO;
+    private final UserDAO userDAO;
 
-    public UserResource(UserDAO peopleDAO) {
-        this.peopleDAO = peopleDAO;
+    public UserResource(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @GET
@@ -48,7 +48,7 @@ public class UserResource {
     }
 
     private User findSafely(long userId) {
-        return peopleDAO.findById(userId).orElseThrow(() -> new NotFoundException("No such user."));
+        return userDAO.findById(userId).orElseThrow(() -> new NotFoundException("No such user."));
     }
 
     // TODO implement the functions for ShopModel

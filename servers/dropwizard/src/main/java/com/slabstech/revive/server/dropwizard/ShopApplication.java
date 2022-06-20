@@ -7,12 +7,13 @@ import com.slabstech.revive.server.dropwizard.cli.RenderCommand;
 import com.slabstech.revive.server.dropwizard.core.User;
 import com.slabstech.revive.server.dropwizard.core.Template;
 import com.slabstech.revive.server.dropwizard.core.User;
+import com.slabstech.revive.server.dropwizard.core.UserRole;
 import com.slabstech.revive.server.dropwizard.db.UserDAO;
 import com.slabstech.revive.server.dropwizard.filter.DateRequiredFeature;
 import com.slabstech.revive.server.dropwizard.health.TemplateHealthCheck;
 import com.slabstech.revive.server.dropwizard.resources.FilteredResource;
 import com.slabstech.revive.server.dropwizard.resources.ShopResource;
-import com.slabstech.revive.server.dropwizard.resources.PeopleResource;
+import com.slabstech.revive.server.dropwizard.resources.UsersResource;
 import com.slabstech.revive.server.dropwizard.resources.UserResource;
 import com.slabstech.revive.server.dropwizard.resources.ProtectedResource;
 import com.slabstech.revive.server.dropwizard.resources.ViewResource;
@@ -87,17 +88,17 @@ public class ShopApplication extends Application<ShopConfiguration> {
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
         environment.jersey().register(DateRequiredFeature.class);
-        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
+        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<UserRole>()
                 .setAuthenticator(new ShopAuthenticator())
                 .setAuthorizer(new ShopAuthorizer())
                 .setRealm("SUPER SECRET STUFF")
                 .buildAuthFilter()));
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(UserRole.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new ShopResource(template));
         environment.jersey().register(new ViewResource());
         environment.jersey().register(new ProtectedResource());
-        environment.jersey().register(new PeopleResource(dao));
+        environment.jersey().register(new UsersResource(dao));
         environment.jersey().register(new UserResource(dao));
         environment.jersey().register(new FilteredResource());
     }
