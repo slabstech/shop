@@ -1,4 +1,5 @@
 package com.slabstech.revive.server.dropwizard.auth;
+import com.slabstech.revive.server.dropwizard.core.UserRole;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 import com.slabstech.revive.server.dropwizard.core.User;
 
-public class ShopAuthenticator implements Authenticator<BasicCredentials, User> {
+public class ShopAuthenticator implements Authenticator<BasicCredentials, UserRole> {
     /**
      * Valid users with mapping user -> roles
      */
@@ -23,9 +24,9 @@ public class ShopAuthenticator implements Authenticator<BasicCredentials, User> 
     ));
 
     @Override
-    public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
+    public Optional<UserRole> authenticate(BasicCredentials credentials) throws AuthenticationException {
         if (VALID_USERS.containsKey(credentials.getUsername()) && "secret".equals(credentials.getPassword())) {
-            return Optional.of(new User(credentials.getUsername(), VALID_USERS.get(credentials.getUsername())));
+            return Optional.of(new UserRole(credentials.getUsername(), VALID_USERS.get(credentials.getUsername())));
         }
         return Optional.empty();
     }

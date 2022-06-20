@@ -36,7 +36,7 @@ class UserResourceTest {
 
         when(DAO.findById(1L)).thenReturn(Optional.of(user));
 
-        User found = RULE.target("/people/1").request().get(User.class);
+        User found = RULE.target("/user/1").request().get(User.class);
 
         assertThat(found.getId()).isEqualTo(user.getId());
         verify(DAO).findById(1L);
@@ -45,7 +45,7 @@ class UserResourceTest {
     @Test
     void getUserNotFound() {
         when(DAO.findById(2L)).thenReturn(Optional.empty());
-        final Response response = RULE.target("/people/2").request().get();
+        final Response response = RULE.target("/user/2").request().get();
 
         assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         verify(DAO).findById(2L);

@@ -117,13 +117,13 @@ public class DockerIntegrationTest {
     void testRenderingUser(String viewName) {
         final User user = new User("Dr. IntegrationTest", "Chief Wizard", 1525);
         final User newUser = postUser(user);
-        final String url = "http://localhost:" + APP.getLocalPort() + "/people/" + newUser.getId() + "/" + viewName;
+        final String url = "http://localhost:" + APP.getLocalPort() + "/user/" + newUser.getId() + "/" + viewName;
         Response response = APP.client().target(url).request().get();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
     }
 
     private User postUser(User user) {
-        return APP.client().target("http://localhost:" + APP.getLocalPort() + "/people")
+        return APP.client().target("http://localhost:" + APP.getLocalPort() + "/user")
                 .request()
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON_TYPE))
                 .readEntity(User.class);
