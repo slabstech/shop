@@ -17,7 +17,9 @@ jobs:
           java-version: 17
           cache: gradle
       - name: "Build the configured project"
-        run: buildAllTasks --scan -x test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: buildAllTasks --scan -x test
       - name: deploy-container-to-registry
         uses: slabstech/action-deploy-container-to-registry@v0.0.1
         with:
